@@ -10,6 +10,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      title: 'flutter-web-cloudflare-ogp',
       home: Scaffold(
         body: Center(
           child: Text('Hello World!'),
