@@ -1,49 +1,20 @@
-export interface Env {
-	NoneOgpWorker: Fetcher;
-}
+import { Hono } from 'hono';
+import { Env } from './env';
+import { htmlRewriter } from './html_rewriter';
 
-export default {
-	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		const noneOgpRes = await env.NoneOgpWorker.fetch(request);
+const app = new Hono<{ Bindings: Env }>();
 
-		return htmlRewriter({
-			siteName: 'flutter-web-cloudflare-ogp',
-			title: 'Ogp Example | flutter-web-cloudflare-ogp',
-			description: 'flutter-web-cloudflare-ogp description',
-			image: 'https://cdn2.thecatapi.com/images/5ia.jpg',
-			imageAlt: 'cat image',
-		}).transform(noneOgpRes);
-	},
-};
+app.get('*', async (c) => {
+	const noneOgpRes = await c.env.NoneOgpWorker.fetch(c.req.raw);
+	// const noneOgpRes = await fetch('https://cdn2.thecatapi.com/images/5ia.jpg');
 
-type OgpProperty = {
-	siteName: string;
-	title: string;
-	description: string;
-	image: string;
-	imageAlt: string;
-};
+	return htmlRewriter({
+		siteName: 'flutter-web-cloudflare-ogp',
+		title: 'Ogp Example | flutter-web-cloudflare-ogp',
+		description: 'flutter-web-cloudflare-ogp description',
+		image: 'https://cdn2.thecatapi.com/images/5ia.jpg',
+		imageAlt: 'cat image',
+	}).transform(noneOgpRes);
+});
 
-const htmlRewriter = (args: OgpProperty) =>
-	new HTMLRewriter().on('head', {
-		element: (e) => {
-			e.before(
-				`
-            <title>${args.title}</title>
-            <meta name="description" content="${args.description}" />
-            <meta property="og:title" content="${args.title}" />
-            <meta property="og:type" content="website" />
-            <meta property="og:site_name" content="${args.siteName}" />
-            <meta property="og:description" content="${args.description}" />
-            <meta property="og:url" content="https://example.com" />
-            <meta property="og:image" content="${args.image}" />
-            <meta property="og:image:alt" content="${args.imageAlt}" />
-            <meta property="twitter:title" content="${args.title}" />
-            <meta property="twitter:description" content="${args.description}" />
-            <meta property="twitter:card" content="summary_large_image" />
-            <meta property="twitter:image:src" content="${args.image}" />
-            `,
-				{ html: true }
-			);
-		},
-	});
+export default app;
