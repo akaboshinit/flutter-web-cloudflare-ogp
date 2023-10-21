@@ -4,18 +4,20 @@
     "private": true,
     "scripts": {
         "deploy": "wrangler deploy",
-        "dev": "wrangler dev",
-        "start": "wrangler dev",
+        "dev": "wrangler dev --remote",
+        "start": "wrangler dev --remote",
         "postinstall": "patch-package"
     },
     "devDependencies": {
         "@cloudflare/workers-types": "^4.20230419.0",
+        "@types/react": "^18.2.30",
         "patch-package": "^8.0.0",
         "typescript": "^5.0.4",
         "wrangler": "^3.14.0"
     },
     "dependencies": {
+        "@vercel/og": "^0.0.27",
         "hono": "^3.8.1",
-        "@vercel/og": "^0.0.27"
+        "react": "^18.2.0"
     }
 }

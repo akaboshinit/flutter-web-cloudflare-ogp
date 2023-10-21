@@ -9,11 +9,16 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'flutter-web-cloudflare-ogp',
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
+    const title = 'Ogp Example | flutter-web-cloudflare-ogp';
+
+    return MaterialApp(
+      home: Title(
+        title: title,
+        color: Colors.white,
+        child: const Scaffold(
+          body: Center(
+            child: Text('Hello World!'),
+          ),
         ),
       ),
     );
